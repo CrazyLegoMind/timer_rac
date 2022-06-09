@@ -1,0 +1,21 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/short_beep.wav-1baf91ac536e58b5fd9b6e2b7168ab51.sample"
+
+[deps]
+
+source_file="res://assets/audio/short_beep.wav"
+dest_files=[ "res://.import/short_beep.wav-1baf91ac536e58b5fd9b6e2b7168ab51.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop=false
+compress/mode=0

@@ -1,0 +1,150 @@
+[gd_scene load_steps=9 format=2]
+
+[ext_resource path="res://scenes/Display.gd" type="Script" id=1]
+[ext_resource path="res://assets/font/font_300.tres" type="DynamicFont" id=2]
+[ext_resource path="res://assets/audio/short_beep.wav" type="AudioStream" id=3]
+[ext_resource path="res://assets/audio/long_beep.ogg" type="AudioStream" id=4]
+[ext_resource path="res://assets/font/Xolonium-Regular.ttf" type="DynamicFontData" id=5]
+
+[sub_resource type="DynamicFontData" id=1]
+font_path = "res://assets/font/Xolonium-Regular.ttf"
+
+[sub_resource type="DynamicFont" id=2]
+size = 48
+outline_size = 2
+outline_color = Color( 0, 0, 0, 1 )
+font_data = SubResource( 1 )
+
+[sub_resource type="DynamicFont" id=3]
+size = 150
+outline_size = 3
+outline_color = Color( 0, 0, 0, 1 )
+extra_spacing_top = -60
+extra_spacing_bottom = -60
+font_data = ExtResource( 5 )
+
+[node name="Display" type="Node2D"]
+script = ExtResource( 1 )
+fight_time_seconds = 90.0
+
+[node name="CutAudioTimer" type="Timer" parent="."]
+wait_time = 0.5
+one_shot = true
+
+[node name="ShortBeep" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 3 )
+
+[node name="ReleaseBeep" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 3 )
+volume_db = 2.364
+pitch_scale = 1.27
+
+[node name="LongBeep" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 4 )
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+margin_left = 4.0
+margin_top = 4.0
+margin_right = 1496.0
+margin_bottom = 846.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer"]
+margin_right = 1492.0
+margin_bottom = 842.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+alignment = 1
+
+[node name="TopHalf" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
+margin_right = 1492.0
+margin_bottom = 419.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+alignment = 1
+
+[node name="ClockLabel" type="Label" parent="MarginContainer/VBoxContainer/TopHalf"]
+margin_left = 388.0
+margin_top = 92.0
+margin_right = 1104.0
+margin_bottom = 327.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+custom_fonts/font = ExtResource( 2 )
+text = "2:00"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
+margin_top = 423.0
+margin_right = 1492.0
+margin_bottom = 842.0
+size_flags_vertical = 3
+
+[node name="RedContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer/HBoxContainer"]
+margin_right = 209.0
+margin_bottom = 419.0
+size_flags_vertical = 9
+
+[node name="RedBufferLabel" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer/RedContainer"]
+margin_top = 122.0
+margin_right = 209.0
+margin_bottom = 180.0
+size_flags_vertical = 10
+custom_colors/font_color = Color( 1, 0, 0, 1 )
+custom_fonts/font = SubResource( 2 )
+text = "0"
+valign = 2
+
+[node name="RedLabel" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer/RedContainer"]
+margin_top = 184.0
+margin_right = 209.0
+margin_bottom = 419.0
+custom_colors/font_color = Color( 1, 0, 0, 1 )
+custom_fonts/font = ExtResource( 2 )
+text = "0"
+
+[node name="ReleaseLabel" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer"]
+margin_left = 213.0
+margin_right = 1279.0
+margin_bottom = 419.0
+size_flags_horizontal = 7
+size_flags_vertical = 5
+custom_fonts/font = SubResource( 3 )
+text = "Release"
+align = 1
+valign = 1
+
+[node name="BlueContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer/HBoxContainer"]
+margin_left = 1283.0
+margin_right = 1492.0
+margin_bottom = 419.0
+size_flags_vertical = 9
+
+[node name="BlueBufferLabel" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer/BlueContainer"]
+margin_top = 122.0
+margin_right = 209.0
+margin_bottom = 180.0
+size_flags_horizontal = 9
+size_flags_vertical = 10
+custom_colors/font_color = Color( 0, 0, 1, 1 )
+custom_fonts/font = SubResource( 2 )
+text = "0"
+align = 2
+valign = 2
+
+[node name="BlueLabel" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer/BlueContainer"]
+margin_top = 184.0
+margin_right = 209.0
+margin_bottom = 419.0
+size_flags_horizontal = 9
+custom_colors/font_color = Color( 0, 0, 1, 1 )
+custom_fonts/font = ExtResource( 2 )
+text = "0"
+align = 1
+valign = 1
+
+[connection signal="timeout" from="CutAudioTimer" to="." method="_on_CutAudioTimer_timeout"]
