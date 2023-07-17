@@ -1,4 +1,4 @@
-extends Node2D
+extends Node
 
 signal countdown_completed
 export var fight_time_seconds:float = 60.0
@@ -18,6 +18,7 @@ var release_state = false
 var last_30_sec = false
 var last_10_sec = false
 
+
 #points variables
 var red_delay:float = 0.0
 var blue_delay:float = 0.0
@@ -25,6 +26,11 @@ var red_point_buffer:int = 0
 var blue_point_buffer:int = 0
 var red_point:int = 0
 var blue_point:int = 0
+var red_hold_time := 0.0
+var blue_hold_time := 0.0
+var red_sum_time := false
+var blue_sum_time := false
+
 
 #release_variables
 var release_flowing: = false
@@ -32,11 +38,11 @@ var release_left: = release_seconds
 var release_text:String = "Release!"
 var release_beeps = false
 
-onready var release_label_node = $MarginContainer/VBoxContainer/HBoxContainer/ReleaseLabel
-onready var red_label_node = $MarginContainer/VBoxContainer/HBoxContainer/RedContainer/RedLabel
-onready var blue_label_node = $MarginContainer/VBoxContainer/HBoxContainer/BlueContainer/BlueLabel
-onready var red_buffer_label_node = $MarginContainer/VBoxContainer/HBoxContainer/RedContainer/RedBufferLabel
-onready var blue_buffer_label_node = $MarginContainer/VBoxContainer/HBoxContainer/BlueContainer/BlueBufferLabel
+onready var release_label_node = $MarginContainer/VBoxContainer/ReleaseLabel
+onready var red_label_node = $MarginContainer/VBoxContainer/TopHalf/RedContainer/RedLabel
+onready var blue_label_node = $MarginContainer/VBoxContainer/TopHalf/BlueContainer/BlueLabel
+onready var red_buffer_label_node = $MarginContainer/VBoxContainer/TopHalf/RedContainer/RedBufferLabel
+onready var blue_buffer_label_node = $MarginContainer/VBoxContainer/TopHalf/BlueContainer/BlueBufferLabel
 onready var timer_label_node = $MarginContainer/VBoxContainer/TopHalf/ClockLabel
 onready var beeps_player_node = $ShortBeep
 onready var beepl_player_node = $LongBeep
@@ -73,34 +79,71 @@ func init_values():
 
 
 func _input(event):
-	var point_mode = 1
-	var release_restart = false
-	if Input.is_action_pressed("mode_key"):
-		point_mode = -1
-		release_restart = true
-	
+
 	if Input.is_action_just_pressed("t_start"):
 		toggle_timer()
 	if Input.is_action_just_pressed("t_reset"):
 		init_values()
 	if Input.is_action_just_pressed("t_release"):
-		toggle_release(release_restart)
+		toggle_release(Input.is_action_pressed("mode_key"))
 	
-	if not time_flowing:
-		point_mode = 0
-	if Input.is_action_just_released("blue_point"):
-		blue_point_buffer += point_mode
-		blue_delay += point_display_delay
-	if Input.is_action_just_released("red_point"):
-		red_point_buffer +=point_mode
-		red_delay += point_display_delay
+
+#	if Input.is_action_just_released("blue_point"):
+#		blue_point_buffer += point_mode
+#		blue_delay += point_display_delay
+#	if Input.is_action_just_released("red_point"):
+#		red_point_buffer += point_mode
+#		red_delay += point_display_delay
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta):
+func _physics_process(delta):
+	handle_point_input(delta)
 	handle_main_timer(delta)
 	handle_points(delta)
 	handle_release_timer(delta)
 
+
+func handle_point_input(delta):
+	var point_mode = 1
+	var release_restart = false
+	if Input.is_action_pressed("mode_key"):
+		point_mode = -1
+		release_restart = true
+	if Input.is_action_pressed("mode_up_key"):
+		point_mode = point_mode*3
+	if not time_flowing:
+		point_mode = 0
+	
+	if Input.is_action_pressed("blue_point"):
+		blue_hold_time += delta
+		if blue_hold_time > 0.03 and blue_sum_time:
+			blue_sum_time = false
+			blue_point_buffer += point_mode
+			blue_delay += point_display_delay
+		if blue_hold_time > 1.0:
+			blue_point_buffer += point_mode
+			blue_delay += point_display_delay
+			blue_hold_time = 0.0
+	else:
+		blue_hold_time = 0.0
+		blue_sum_time = true
+	
+	
+	if Input.is_action_pressed("red_point"):
+		red_hold_time += delta
+		if red_hold_time > 0.03 and red_sum_time:
+			red_sum_time = false
+			red_point_buffer += point_mode
+			red_delay += point_display_delay
+		if red_hold_time > 1.0:
+			red_point_buffer += point_mode
+			red_delay += point_display_delay
+			red_hold_time = 0.0
+	else:
+		red_hold_time = 0.0
+		red_sum_time = true
+	
+	
 
 func handle_points(delta):
 	# big points
