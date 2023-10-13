@@ -31,6 +31,11 @@ var blue_hold_time := 0.0
 var red_sum_time := false
 var blue_sum_time := false
 
+var blue_touch_state := false
+var blue_touch_cooldown := 0.0
+var red_touch_state := false
+var red_touch_cooldown := 0.0
+
 
 #release_variables
 var release_flowing: = false
@@ -38,14 +43,16 @@ var release_left: = release_seconds
 var release_text:String = "Release!"
 var release_beeps = false
 
-onready var release_label_node = $MarginContainer/VBoxContainer/ReleaseLabel
+onready var release_label_node = $MarginContainer/VBoxContainer/TopHalf/TimerContainer/ReleaseLabel
 onready var red_label_node = $MarginContainer/VBoxContainer/TopHalf/RedContainer/RedLabel
 onready var blue_label_node = $MarginContainer/VBoxContainer/TopHalf/BlueContainer/BlueLabel
-onready var red_buffer_label_node = $MarginContainer/VBoxContainer/TopHalf/RedContainer/RedBufferLabel
-onready var blue_buffer_label_node = $MarginContainer/VBoxContainer/TopHalf/BlueContainer/BlueBufferLabel
-onready var timer_label_node = $MarginContainer/VBoxContainer/TopHalf/ClockLabel
+onready var red_buffer_label_node = $MarginContainer/VBoxContainer/BottomPart/RightSide/RedBufferLabel
+onready var blue_buffer_label_node = $MarginContainer/VBoxContainer/BottomPart/LeftSide/BlueBufferLabel
+onready var timer_label_node = $MarginContainer/VBoxContainer/TopHalf/TimerContainer/ClockLabel
 onready var beeps_player_node = $ShortBeep
 onready var beepl_player_node = $LongBeep
+onready var blue_bottom_label = $MarginContainer/VBoxContainer/BottomPart/LeftSide/BlueLabel
+onready var red_bottom_label = $MarginContainer/VBoxContainer/BottomPart/RightSide/RedLabel
 
 func _ready():
 	init_values()
@@ -113,6 +120,26 @@ func handle_point_input(delta):
 		point_mode = point_mode*3
 	if not time_flowing:
 		point_mode = 0
+	if blue_touch_cooldown >= 0.0:
+		blue_touch_cooldown -= delta
+	if red_touch_cooldown >= 0.0:
+		red_touch_cooldown -= delta
+	
+	if Input.is_action_pressed("blue_touch") and not blue_touch_state:
+		blue_touch_state = true
+		if blue_touch_cooldown <= 0.0:
+			blue_point_buffer += 1
+			blue_touch_cooldown = 1.0
+	elif not Input.is_action_pressed("blue_touch"):
+		blue_touch_state = false
+	
+	if Input.is_action_pressed("red_touch") and not red_touch_state:
+		red_touch_state = true
+		if red_touch_cooldown <= 0.0:
+			red_point_buffer += 1
+			red_touch_cooldown = 1.0
+	elif not Input.is_action_pressed("red_touch"):
+		red_touch_state = false
 	
 	if Input.is_action_pressed("blue_point"):
 		blue_hold_time += delta
@@ -161,10 +188,13 @@ func handle_points(delta):
 		blue_point_buffer = blue_point_buffer - temp
 	blue_label_node.text = str(blue_point)
 	red_label_node.text = str(red_point)
+	blue_bottom_label.text = str(blue_point)
+	red_bottom_label.text = str(red_point)
 	#feedback buffers
 	
 	blue_buffer_label_node.text = ("+" if blue_point_buffer>0 else "")+str(blue_point_buffer)
 	red_buffer_label_node.text = ("+" if red_point_buffer>0 else "")+str(red_point_buffer)
+	
 
 func handle_main_timer(delta):
 	if time_flowing :
