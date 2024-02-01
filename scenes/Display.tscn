@@ -30,10 +30,7 @@ stream = ExtResource( 4 )
 [node name="MarginContainer" type="MarginContainer" parent="."]
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_left = 30.0
-margin_top = 30.0
-margin_right = -30.0
-margin_bottom = -30.0
+margin_top = 104.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 __meta__ = {
@@ -41,18 +38,47 @@ __meta__ = {
 }
 
 [node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer"]
-margin_right = 1860.0
-margin_bottom = 1020.0
-size_flags_horizontal = 3
-size_flags_vertical = 3
+margin_right = 1920.0
+margin_bottom = 461.0
+size_flags_vertical = 2
 alignment = 1
 
 [node name="TopHalf" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
-margin_right = 1860.0
-margin_bottom = 120.0
+margin_left = 838.0
+margin_right = 1081.0
+margin_bottom = 93.0
+size_flags_horizontal = 4
+size_flags_vertical = 3
 alignment = 1
 
+[node name="TimerContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer/TopHalf"]
+margin_right = 243.0
+margin_bottom = 93.0
+size_flags_horizontal = 0
+size_flags_vertical = 3
+custom_constants/separation = 35
+alignment = 1
+
+[node name="ClockLabel" type="Label" parent="MarginContainer/VBoxContainer/TopHalf/TimerContainer"]
+margin_right = 243.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_fonts/font = ExtResource( 6 )
+text = "2:00"
+align = 1
+valign = 1
+
+[node name="ReleaseLabel" type="Label" parent="MarginContainer/VBoxContainer/TopHalf/TimerContainer"]
+margin_top = 35.0
+margin_right = 243.0
+margin_bottom = 93.0
+custom_fonts/font = ExtResource( 5 )
+text = "Release"
+align = 1
+valign = 1
+
 [node name="RedContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer/TopHalf"]
+visible = false
 margin_right = 142.0
 margin_bottom = 120.0
 size_flags_horizontal = 2
@@ -65,39 +91,15 @@ custom_colors/font_color = Color( 1, 0, 0, 1 )
 custom_fonts/font = ExtResource( 7 )
 text = "0"
 
-[node name="TimerContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer/TopHalf"]
-margin_left = 808.0
-margin_right = 1051.0
-margin_bottom = 120.0
-size_flags_horizontal = 5
-
-[node name="ClockLabel" type="Label" parent="MarginContainer/VBoxContainer/TopHalf/TimerContainer"]
-margin_right = 243.0
-margin_bottom = 58.0
-size_flags_horizontal = 5
-size_flags_vertical = 3
-custom_fonts/font = ExtResource( 6 )
-text = "2:00"
-align = 1
-valign = 1
-
-[node name="ReleaseLabel" type="Label" parent="MarginContainer/VBoxContainer/TopHalf/TimerContainer"]
-margin_top = 62.0
-margin_right = 243.0
-margin_bottom = 120.0
-custom_fonts/font = ExtResource( 5 )
-text = "Release"
-align = 1
-valign = 1
-
 [node name="BlueContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer/TopHalf"]
-margin_left = 1718.0
-margin_right = 1860.0
-margin_bottom = 120.0
+visible = false
+margin_left = 247.0
+margin_right = 247.0
 size_flags_horizontal = 10
 size_flags_vertical = 0
 
 [node name="BlueLabel" type="Label" parent="MarginContainer/VBoxContainer/TopHalf/BlueContainer"]
+visible = false
 margin_right = 142.0
 margin_bottom = 120.0
 size_flags_horizontal = 9
@@ -108,10 +110,9 @@ align = 1
 valign = 1
 
 [node name="BottomPart" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
-margin_top = 390.0
-margin_right = 1860.0
-margin_bottom = 754.0
-size_flags_vertical = 6
+margin_top = 97.0
+margin_right = 1920.0
+margin_bottom = 461.0
 
 [node name="LeftSide" type="VBoxContainer" parent="MarginContainer/VBoxContainer/BottomPart"]
 margin_right = 284.0
@@ -141,11 +142,10 @@ align = 1
 valign = 1
 
 [node name="RightSide" type="VBoxContainer" parent="MarginContainer/VBoxContainer/BottomPart"]
-margin_left = 1576.0
-margin_right = 1860.0
+margin_left = 1636.0
+margin_right = 1920.0
 margin_bottom = 364.0
-size_flags_horizontal = 8
-size_flags_vertical = 10
+size_flags_horizontal = 0
 
 [node name="RedBufferLabel" type="Label" parent="MarginContainer/VBoxContainer/BottomPart/RightSide"]
 margin_right = 284.0

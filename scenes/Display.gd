@@ -93,7 +93,8 @@ func _input(event):
 		init_values()
 	if Input.is_action_just_pressed("t_release"):
 		toggle_release(Input.is_action_pressed("mode_key"))
-	
+	if Input.is_action_just_pressed("fullscreen"):
+		OS.set_window_fullscreen(true)
 
 #	if Input.is_action_just_released("blue_point"):
 #		blue_point_buffer += point_mode
@@ -194,6 +195,7 @@ func handle_points(delta):
 	
 	blue_buffer_label_node.text = ("+" if blue_point_buffer>0 else "")+str(blue_point_buffer)
 	red_buffer_label_node.text = ("+" if red_point_buffer>0 else "")+str(red_point_buffer)
+	print("R: ",red_buffer_label_node.text," ", blue_label_node.text,"  B: ", red_label_node.text," ",blue_buffer_label_node.text)
 	
 
 func handle_main_timer(delta):
