@@ -7,6 +7,8 @@ const final_beeps_amount:int = 3
 const countdown_seconds:int = 3
 const release_seconds:float = 5.0
 
+var fscreen_mode := false
+
 #timer variables
 var time_flowing := false
 var countdown_running := false
@@ -94,7 +96,8 @@ func _input(event):
 	if Input.is_action_just_pressed("t_release"):
 		toggle_release(Input.is_action_pressed("mode_key"))
 	if Input.is_action_just_pressed("fullscreen"):
-		OS.set_window_fullscreen(true)
+		fscreen_mode = !fscreen_mode
+		OS.set_window_fullscreen(fscreen_mode)
 
 #	if Input.is_action_just_released("blue_point"):
 #		blue_point_buffer += point_mode

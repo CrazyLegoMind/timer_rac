@@ -30,7 +30,6 @@ stream = ExtResource( 4 )
 [node name="MarginContainer" type="MarginContainer" parent="."]
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_top = 104.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 __meta__ = {
@@ -39,28 +38,39 @@ __meta__ = {
 
 [node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer"]
 margin_right = 1920.0
-margin_bottom = 461.0
-size_flags_vertical = 2
-alignment = 1
+margin_bottom = 1080.0
+size_flags_vertical = 3
 
 [node name="TopHalf" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
-margin_left = 838.0
-margin_right = 1081.0
-margin_bottom = 93.0
-size_flags_horizontal = 4
-size_flags_vertical = 3
+margin_right = 1920.0
+margin_bottom = 173.0
+size_flags_vertical = 0
 alignment = 1
 
-[node name="TimerContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer/TopHalf"]
-margin_right = 243.0
-margin_bottom = 93.0
+[node name="RedContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer/TopHalf"]
+margin_right = 142.0
+margin_bottom = 160.0
 size_flags_horizontal = 0
-size_flags_vertical = 3
+size_flags_vertical = 0
+
+[node name="RedLabel" type="Label" parent="MarginContainer/VBoxContainer/TopHalf/RedContainer"]
+margin_right = 142.0
+margin_bottom = 160.0
+custom_colors/font_color = Color( 1, 0, 0, 1 )
+custom_fonts/font = ExtResource( 7 )
+text = "0"
+
+[node name="TimerContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer/TopHalf"]
+margin_left = 146.0
+margin_right = 1774.0
+margin_bottom = 173.0
+size_flags_horizontal = 7
 custom_constants/separation = 35
 alignment = 1
 
 [node name="ClockLabel" type="Label" parent="MarginContainer/VBoxContainer/TopHalf/TimerContainer"]
-margin_right = 243.0
+margin_right = 1628.0
+margin_bottom = 80.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 custom_fonts/font = ExtResource( 6 )
@@ -69,39 +79,25 @@ align = 1
 valign = 1
 
 [node name="ReleaseLabel" type="Label" parent="MarginContainer/VBoxContainer/TopHalf/TimerContainer"]
-margin_top = 35.0
-margin_right = 243.0
-margin_bottom = 93.0
+margin_left = 715.0
+margin_top = 115.0
+margin_right = 913.0
+margin_bottom = 173.0
+size_flags_horizontal = 4
+size_flags_vertical = 1
 custom_fonts/font = ExtResource( 5 )
 text = "Release"
 align = 1
 valign = 1
 
-[node name="RedContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer/TopHalf"]
-visible = false
-margin_right = 142.0
-margin_bottom = 120.0
-size_flags_horizontal = 2
-size_flags_vertical = 0
-
-[node name="RedLabel" type="Label" parent="MarginContainer/VBoxContainer/TopHalf/RedContainer"]
-margin_right = 142.0
-margin_bottom = 120.0
-custom_colors/font_color = Color( 1, 0, 0, 1 )
-custom_fonts/font = ExtResource( 7 )
-text = "0"
-
 [node name="BlueContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer/TopHalf"]
-visible = false
-margin_left = 247.0
-margin_right = 247.0
-size_flags_horizontal = 10
-size_flags_vertical = 0
+margin_left = 1778.0
+margin_right = 1920.0
+margin_bottom = 173.0
 
 [node name="BlueLabel" type="Label" parent="MarginContainer/VBoxContainer/TopHalf/BlueContainer"]
-visible = false
 margin_right = 142.0
-margin_bottom = 120.0
+margin_bottom = 160.0
 size_flags_horizontal = 9
 custom_colors/font_color = Color( 0, 0, 1, 1 )
 custom_fonts/font = ExtResource( 7 )
@@ -110,18 +106,45 @@ align = 1
 valign = 1
 
 [node name="BottomPart" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
-margin_top = 97.0
+margin_top = 716.0
 margin_right = 1920.0
-margin_bottom = 461.0
+margin_bottom = 1080.0
+size_flags_vertical = 10
 
-[node name="LeftSide" type="VBoxContainer" parent="MarginContainer/VBoxContainer/BottomPart"]
+[node name="RightSide" type="VBoxContainer" parent="MarginContainer/VBoxContainer/BottomPart"]
 margin_right = 284.0
 margin_bottom = 364.0
 size_flags_horizontal = 2
+
+[node name="RedBufferLabel" type="Label" parent="MarginContainer/VBoxContainer/BottomPart/RightSide"]
+margin_right = 284.0
+margin_bottom = 80.0
+size_flags_vertical = 10
+custom_colors/font_color = Color( 1, 0, 0, 1 )
+custom_fonts/font = ExtResource( 6 )
+text = "0"
+valign = 2
+
+[node name="RedLabel" type="Label" parent="MarginContainer/VBoxContainer/BottomPart/RightSide"]
+margin_top = 84.0
+margin_right = 284.0
+margin_bottom = 364.0
+custom_colors/font_color = Color( 1, 0, 0, 1 )
+custom_fonts/font = ExtResource( 2 )
+text = "0"
+align = 1
+valign = 1
+
+[node name="LeftSide" type="VBoxContainer" parent="MarginContainer/VBoxContainer/BottomPart"]
+margin_left = 1636.0
+margin_right = 1920.0
+margin_bottom = 364.0
+size_flags_horizontal = 0
 size_flags_vertical = 8
 
 [node name="BlueBufferLabel" type="Label" parent="MarginContainer/VBoxContainer/BottomPart/LeftSide"]
 margin_right = 284.0
+margin_bottom = 80.0
 size_flags_horizontal = 9
 size_flags_vertical = 10
 custom_colors/font_color = Color( 0, 0, 1, 1 )
@@ -131,7 +154,7 @@ align = 2
 valign = 2
 
 [node name="BlueLabel" type="Label" parent="MarginContainer/VBoxContainer/BottomPart/LeftSide"]
-margin_top = 4.0
+margin_top = 84.0
 margin_right = 284.0
 margin_bottom = 364.0
 size_flags_horizontal = 9
@@ -140,27 +163,5 @@ custom_fonts/font = ExtResource( 2 )
 text = "0"
 align = 1
 valign = 1
-
-[node name="RightSide" type="VBoxContainer" parent="MarginContainer/VBoxContainer/BottomPart"]
-margin_left = 1636.0
-margin_right = 1920.0
-margin_bottom = 364.0
-size_flags_horizontal = 0
-
-[node name="RedBufferLabel" type="Label" parent="MarginContainer/VBoxContainer/BottomPart/RightSide"]
-margin_right = 284.0
-size_flags_vertical = 10
-custom_colors/font_color = Color( 1, 0, 0, 1 )
-custom_fonts/font = ExtResource( 6 )
-text = "0"
-valign = 2
-
-[node name="RedLabel" type="Label" parent="MarginContainer/VBoxContainer/BottomPart/RightSide"]
-margin_top = 4.0
-margin_right = 284.0
-margin_bottom = 364.0
-custom_colors/font_color = Color( 1, 0, 0, 1 )
-custom_fonts/font = ExtResource( 2 )
-text = "0"
 
 [connection signal="timeout" from="CutAudioTimer" to="." method="_on_CutAudioTimer_timeout"]
