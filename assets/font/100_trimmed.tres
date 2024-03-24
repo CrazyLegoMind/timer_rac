@@ -1,0 +1,8 @@
+[gd_resource type="FontVariation" load_steps=2 format=3 uid="uid://bdlpo0x6gqswq"]
+
+[ext_resource type="FontFile" uid="uid://ddu7yhrg1bqwp" path="res://assets/font/Xolonium-Regular.ttf" id="1_jv4ss"]
+
+[resource]
+base_font = ExtResource("1_jv4ss")
+spacing_top = -25
+spacing_bottom = -25

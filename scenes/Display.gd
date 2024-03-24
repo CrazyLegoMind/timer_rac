@@ -1,7 +1,7 @@
 extends Node
 
 signal countdown_completed
-export var fight_time_seconds:float = 60.0
+@export var fight_time_seconds:float = 60.0
 const point_display_delay:float = 0.5
 const final_beeps_amount:int = 3
 const countdown_seconds:int = 3
@@ -45,16 +45,19 @@ var release_left: = release_seconds
 var release_text:String = "Release!"
 var release_beeps = false
 
-onready var release_label_node = $MarginContainer/VBoxContainer/TopHalf/TimerContainer/ReleaseLabel
-onready var red_label_node = $MarginContainer/VBoxContainer/TopHalf/RedContainer/RedLabel
-onready var blue_label_node = $MarginContainer/VBoxContainer/TopHalf/BlueContainer/BlueLabel
-onready var red_buffer_label_node = $MarginContainer/VBoxContainer/BottomPart/RightSide/RedBufferLabel
-onready var blue_buffer_label_node = $MarginContainer/VBoxContainer/BottomPart/LeftSide/BlueBufferLabel
-onready var timer_label_node = $MarginContainer/VBoxContainer/TopHalf/TimerContainer/ClockLabel
-onready var beeps_player_node = $ShortBeep
-onready var beepl_player_node = $LongBeep
-onready var blue_bottom_label = $MarginContainer/VBoxContainer/BottomPart/LeftSide/BlueLabel
-onready var red_bottom_label = $MarginContainer/VBoxContainer/BottomPart/RightSide/RedLabel
+@onready var release_label_node = $MarginContainer/VBoxContainer/TopHalf/TimerContainer/ReleaseLabel
+@onready var red_label_node = $MarginContainer/VBoxContainer/TopHalf/RedContainer/RedLabel
+@onready var blue_label_node = $MarginContainer/VBoxContainer/TopHalf/BlueContainer/BlueLabel
+@onready var red_buffer_label_node = $MarginContainer/VBoxContainer/BottomPart/RightSide/RedBufferLabel
+@onready var blue_buffer_label_node = $MarginContainer/VBoxContainer/BottomPart/LeftSide/BlueBufferLabel
+@onready var timer_label_node = $MarginContainer/VBoxContainer/TopHalf/TimerContainer/ClockLabel
+@onready var beeps_player_node = $ShortBeep
+@onready var beepl_player_node = $LongBeep
+@onready var blue_bottom_label = $MarginContainer/VBoxContainer/BottomPart/LeftSide/BlueLabel
+@onready var red_bottom_label = $MarginContainer/VBoxContainer/BottomPart/RightSide/RedLabel
+@onready var red_name_optlabel = $MarginContainer/VBoxContainer/HBoxContainer/RedName
+@onready var blue_name_optlabel = $MarginContainer/VBoxContainer/HBoxContainer/BlueName
+
 
 func _ready():
 	init_values()
@@ -72,7 +75,7 @@ func init_values():
 	time_flowing = false
 	time_left = fight_time_seconds
 	final_beeps_remaining = final_beeps_amount
-	timer_label_node.self_modulate = Color(Color.white)
+	timer_label_node.self_modulate = Color(Color.WHITE)
 	timer_text = "Ready"
 	standby = true
 	last_10_sec = false
@@ -82,7 +85,7 @@ func init_values():
 	release_state = false
 	release_flowing = false
 	release_beeps = false
-	release_label_node.self_modulate = Color(Color.yellow)
+	release_label_node.self_modulate = Color(Color.YELLOW)
 	release_label_node.set_text("")
 
 
@@ -90,14 +93,18 @@ func init_values():
 func _input(event):
 
 	if Input.is_action_just_pressed("t_start"):
+		print("\nMATCH SART/PAUSE")
+		print_match_scores()
 		toggle_timer()
 	if Input.is_action_just_pressed("t_reset"):
+		print("\nMATCH RESET")
+		print_match_scores()
 		init_values()
 	if Input.is_action_just_pressed("t_release"):
 		toggle_release(Input.is_action_pressed("mode_key"))
 	if Input.is_action_just_pressed("fullscreen"):
 		fscreen_mode = !fscreen_mode
-		OS.set_window_fullscreen(fscreen_mode)
+		get_window().mode = Window.MODE_EXCLUSIVE_FULLSCREEN if (fscreen_mode) else Window.MODE_WINDOWED
 
 #	if Input.is_action_just_released("blue_point"):
 #		blue_point_buffer += point_mode
@@ -198,8 +205,6 @@ func handle_points(delta):
 	
 	blue_buffer_label_node.text = ("+" if blue_point_buffer>0 else "")+str(blue_point_buffer)
 	red_buffer_label_node.text = ("+" if red_point_buffer>0 else "")+str(red_point_buffer)
-	print("R: ",red_buffer_label_node.text," ", blue_label_node.text,"  B: ", red_label_node.text," ",blue_buffer_label_node.text)
-	
 
 func handle_main_timer(delta):
 	if time_flowing :
@@ -211,13 +216,13 @@ func handle_main_timer(delta):
 			standby = true
 		if time_left < 30 and not last_30_sec:
 			last_30_sec = true
-			timer_label_node.self_modulate = Color(Color.yellow)
+			timer_label_node.self_modulate = Color(Color.YELLOW)
 			beepl_player_node.pitch_scale = 0.5
 			beepl_player_node.play()
 			$CutAudioTimer.start()
 		if time_left < 10 and not last_10_sec:
 			last_10_sec = true
-			timer_label_node.self_modulate = Color(Color.orangered)
+			timer_label_node.self_modulate = Color(Color.ORANGE_RED)
 			beepl_player_node.pitch_scale = 0.5
 			beepl_player_node.play()
 			$CutAudioTimer.start()
@@ -248,10 +253,10 @@ func handle_release_timer(delta):
 			release_label_node.set_text("Release!")
 			release_beeps = true
 			$ReleaseBeep.play()
-			yield(get_tree().create_timer(0.4),"timeout")
+			await get_tree().create_timer(0.4).timeout
 			$ReleaseBeep.stop()
 			$ReleaseBeep.play()
-			yield(get_tree().create_timer(0.4),"timeout")
+			await get_tree().create_timer(0.4).timeout
 			$ReleaseBeep.stop()
 			release_beeps = false
 		else:
@@ -284,13 +289,13 @@ func toggle_timer():
 		if countdown_running or time_left <= 0:
 			return
 		countdown(countdown_seconds)
-		yield(self,"countdown_completed")
+		await self.countdown_completed
 		time_flowing = true
 		if release_state:
 			release_flowing = true
 
 func countdown(duration_sec:int):
-	timer_label_node.self_modulate = Color(Color.white)
+	timer_label_node.self_modulate = Color(Color.WHITE)
 	if countdown_running:
 		return
 	countdown_running = true
@@ -298,20 +303,20 @@ func countdown(duration_sec:int):
 	for i in duration_sec:
 		timer_label_node.text = str(duration_sec-i)+ ".."
 		beeps_player_node.play()
-		yield(get_tree().create_timer(1),"timeout")
+		await get_tree().create_timer(1).timeout
 	beepl_player_node.pitch_scale = 0.8
 	emit_signal("countdown_completed")
 	standby = false
 	timer_label_node.text = "Start!"
 	beepl_player_node.play()
-	yield(get_tree().create_timer(0.5),"timeout")
+	await get_tree().create_timer(0.5).timeout
 	beepl_player_node.stop()
 	countdown_running = false
 
 func seconds_to_timestamp(seconds_f:float) -> String:
 		var minutes = int(seconds_f)/60
 		var seconds = int(seconds_f-minutes*60)
-		var centis = stepify(seconds_f-minutes*60-seconds,0.1)*10
+		var centis = snapped(seconds_f-minutes*60-seconds,0.1)*10
 		if centis>=10:
 			centis = 0
 		var sec_dec = ""
@@ -320,7 +325,13 @@ func seconds_to_timestamp(seconds_f:float) -> String:
 		var res = str(minutes)+":"+sec_dec+str(seconds)+"."+str(centis)
 		return res
 
-
+func print_match_scores():
+	var red_name = red_name_optlabel.get_item_text(red_name_optlabel.get_selected_id())
+	var blue_name = blue_name_optlabel.get_item_text(blue_name_optlabel.get_selected_id())
+	print("WIN FOR ",red_name, " -> ", red_name," ",red_point+round(time_left), " - ", blue_point," ",blue_name )
+	print("WIN FOR ",blue_name, " -> ",red_name," ",red_point, " - ", blue_point+round(time_left)," ",blue_name )
+	
+	
 
 func _on_CutAudioTimer_timeout():
 	$LongBeep.stop()

@@ -1,0 +1,8 @@
+[gd_resource type="FontVariation" load_steps=2 format=3 uid="uid://ech6a44gjkma"]
+
+[ext_resource type="FontFile" uid="uid://ddu7yhrg1bqwp" path="res://assets/font/Xolonium-Regular.ttf" id="1_vrhoa"]
+
+[resource]
+base_font = ExtResource("1_vrhoa")
+spacing_top = -5
+spacing_bottom = -5

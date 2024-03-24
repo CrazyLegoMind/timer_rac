@@ -1,13 +1,14 @@
 [remap]
 
 importer="wav"
-type="AudioStreamSample"
-path="res://.import/short_beep.wav-1baf91ac536e58b5fd9b6e2b7168ab51.sample"
+type="AudioStreamWAV"
+uid="uid://b3n3yxw2okk66"
+path="res://.godot/imported/short_beep.wav-1baf91ac536e58b5fd9b6e2b7168ab51.sample"
 
 [deps]
 
 source_file="res://assets/audio/short_beep.wav"
-dest_files=[ "res://.import/short_beep.wav-1baf91ac536e58b5fd9b6e2b7168ab51.sample" ]
+dest_files=["res://.godot/imported/short_beep.wav-1baf91ac536e58b5fd9b6e2b7168ab51.sample"]
 
 [params]
 
@@ -17,5 +18,7 @@ force/max_rate=false
 force/max_rate_hz=44100
 edit/trim=false
 edit/normalize=false
-edit/loop=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
 compress/mode=0
