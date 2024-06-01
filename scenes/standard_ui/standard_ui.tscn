@@ -1,0 +1,157 @@
+[gd_scene load_steps=7 format=3 uid="uid://ut5bhhc2ke2y"]
+
+[ext_resource type="Theme" uid="uid://b1evs2a7h13oy" path="res://assets/main_theme.tres" id="1_q44xk"]
+[ext_resource type="FontVariation" uid="uid://ech6a44gjkma" path="res://assets/font/50_trimmed.tres" id="2_blh57"]
+[ext_resource type="Script" path="res://scenes/standard_ui/standard_ui.gd" id="2_r407t"]
+[ext_resource type="FontVariation" uid="uid://b3huf8a2ie6uu" path="res://assets/font/200_trimmed.tres" id="3_jalsa"]
+[ext_resource type="FontVariation" uid="uid://bdlpo0x6gqswq" path="res://assets/font/100_trimmed.tres" id="4_sj43n"]
+[ext_resource type="FontVariation" uid="uid://cl6rn10f2dnr1" path="res://assets/font/600_trimmed.tres" id="5_pa8jx"]
+
+[node name="StandardUI" type="MarginContainer" node_paths=PackedStringArray("red_bot_label", "blue_bot_label", "timer_label", "debug_label", "red_points_labels", "blue_points_labels", "red_buffer_label", "blue_buffer_label")]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme = ExtResource("1_q44xk")
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
+script = ExtResource("2_r407t")
+red_bot_label = NodePath("VBoxContainer/HBoxContainer/RedBotLabel")
+blue_bot_label = NodePath("VBoxContainer/HBoxContainer/BlueBotLabel")
+timer_label = NodePath("VBoxContainer/TopHalf/TimerContainer/TimerLabel")
+debug_label = NodePath("VBoxContainer/TopHalf/TimerContainer/DebugLabel")
+red_points_labels = [NodePath("VBoxContainer/TopHalf/RedContainer/RedTpPoints"), NodePath("VBoxContainer/BottomPart/RedSide/RedBtmPoints")]
+blue_points_labels = [NodePath("VBoxContainer/TopHalf/BlueContainer/BlueTpPoints"), NodePath("VBoxContainer/BottomPart/BlueSide/BlueBtmPoints")]
+red_buffer_label = NodePath("VBoxContainer/BottomPart/RedSide/RedBufferLabel")
+blue_buffer_label = NodePath("VBoxContainer/BottomPart/BlueSide/BlueBufferLabel")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="RedBotLabel" type="Label" parent="VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_colors/font_color = Color(1, 0, 0, 1)
+theme_override_constants/outline_size = 20
+theme_override_fonts/font = ExtResource("2_blh57")
+theme_override_font_sizes/font_size = 80
+text = "Red Bot"
+
+[node name="BlueBotLabel" type="Label" parent="VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 10
+theme_override_colors/font_color = Color(0, 0, 1, 1)
+theme_override_constants/outline_size = 20
+theme_override_fonts/font = ExtResource("2_blh57")
+theme_override_font_sizes/font_size = 80
+text = "Blue Bot"
+
+[node name="TopHalf" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 0
+alignment = 1
+
+[node name="RedContainer" type="VBoxContainer" parent="VBoxContainer/TopHalf"]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+
+[node name="RedTpPoints" type="Label" parent="VBoxContainer/TopHalf/RedContainer"]
+custom_minimum_size = Vector2(290, 0)
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_colors/font_color = Color(1, 0, 0, 1)
+theme_override_fonts/font = ExtResource("3_jalsa")
+theme_override_font_sizes/font_size = 240
+text = "0"
+
+[node name="TimerContainer" type="VBoxContainer" parent="VBoxContainer/TopHalf"]
+layout_mode = 2
+size_flags_horizontal = 6
+theme_override_constants/separation = 35
+alignment = 1
+
+[node name="TimerLabel" type="Label" parent="VBoxContainer/TopHalf/TimerContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 3
+theme_override_fonts/font = ExtResource("3_jalsa")
+theme_override_font_sizes/font_size = 200
+text = "2:00"
+
+[node name="DebugLabel" type="Label" parent="VBoxContainer/TopHalf/TimerContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 1
+theme_override_fonts/font = ExtResource("2_blh57")
+theme_override_font_sizes/font_size = 50
+text = "Release"
+
+[node name="BlueContainer" type="VBoxContainer" parent="VBoxContainer/TopHalf"]
+layout_mode = 2
+
+[node name="BlueTpPoints" type="Label" parent="VBoxContainer/TopHalf/BlueContainer"]
+custom_minimum_size = Vector2(290, 0)
+layout_mode = 2
+size_flags_horizontal = 9
+theme_override_colors/font_color = Color(0, 0, 1, 1)
+theme_override_fonts/font = ExtResource("3_jalsa")
+theme_override_font_sizes/font_size = 240
+text = "0"
+horizontal_alignment = 2
+
+[node name="BottomPart" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 10
+
+[node name="RedSide" type="VBoxContainer" parent="VBoxContainer/BottomPart"]
+layout_mode = 2
+size_flags_horizontal = 2
+
+[node name="RedBufferLabel" type="Label" parent="VBoxContainer/BottomPart/RedSide"]
+layout_mode = 2
+size_flags_vertical = 10
+theme_override_colors/font_color = Color(1, 0, 0, 1)
+theme_override_fonts/font = ExtResource("4_sj43n")
+theme_override_font_sizes/font_size = 100
+text = "0"
+horizontal_alignment = 1
+
+[node name="RedBtmPoints" type="Label" parent="VBoxContainer/BottomPart/RedSide"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0, 0, 1)
+theme_override_fonts/font = ExtResource("5_pa8jx")
+theme_override_font_sizes/font_size = 600
+text = "0"
+
+[node name="BlueSide" type="VBoxContainer" parent="VBoxContainer/BottomPart"]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 8
+
+[node name="BlueBufferLabel" type="Label" parent="VBoxContainer/BottomPart/BlueSide"]
+layout_mode = 2
+size_flags_horizontal = 9
+size_flags_vertical = 10
+theme_override_colors/font_color = Color(0, 0, 1, 1)
+theme_override_fonts/font = ExtResource("4_sj43n")
+theme_override_font_sizes/font_size = 100
+text = "0"
+horizontal_alignment = 1
+
+[node name="BlueBtmPoints" type="Label" parent="VBoxContainer/BottomPart/BlueSide"]
+layout_mode = 2
+size_flags_horizontal = 9
+theme_override_colors/font_color = Color(0, 0, 1, 1)
+theme_override_fonts/font = ExtResource("5_pa8jx")
+theme_override_font_sizes/font_size = 600
+text = "0"

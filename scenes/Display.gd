@@ -45,24 +45,38 @@ var release_left: = release_seconds
 var release_text:String = "Release!"
 var release_beeps = false
 
-@onready var release_label_node = $MarginContainer/VBoxContainer/TopHalf/TimerContainer/ReleaseLabel
-@onready var red_label_node = $MarginContainer/VBoxContainer/TopHalf/RedContainer/RedLabel
-@onready var blue_label_node = $MarginContainer/VBoxContainer/TopHalf/BlueContainer/BlueLabel
-@onready var red_buffer_label_node = $MarginContainer/VBoxContainer/BottomPart/RightSide/RedBufferLabel
-@onready var blue_buffer_label_node = $MarginContainer/VBoxContainer/BottomPart/LeftSide/BlueBufferLabel
-@onready var timer_label_node = $MarginContainer/VBoxContainer/TopHalf/TimerContainer/ClockLabel
+var release_label_node = null
+var red_buffer_label_node = null
+var blue_buffer_label_node = null
+var timer_label_node = null
 @onready var beeps_player_node = $ShortBeep
 @onready var beepl_player_node = $LongBeep
-@onready var blue_bottom_label = $MarginContainer/VBoxContainer/BottomPart/LeftSide/BlueLabel
-@onready var red_bottom_label = $MarginContainer/VBoxContainer/BottomPart/RightSide/RedLabel
-@onready var red_name_optlabel = $MarginContainer/VBoxContainer/HBoxContainer/RedName
-@onready var blue_name_optlabel = $MarginContainer/VBoxContainer/HBoxContainer/BlueName
+var red_name_optlabel = null
+var blue_name_optlabel = null
 
+var root_ui_node: MatchUI = null
+
+var blue_bot_id = 0;
+var red_bot_id = 0;
 
 func _ready():
+	fill_nodes($StandardUI)
+	
 	init_values()
 	#Engine.time_scale = 0.2
 	pass # Replace with function body.
+
+func fill_nodes(root_ui:MatchUI):
+	root_ui_node = root_ui
+	
+	timer_label_node = root_ui_node.timer_label
+	release_label_node = root_ui_node.debug_label
+	
+	red_name_optlabel = root_ui_node.red_bot_label
+	blue_name_optlabel = root_ui_node.blue_bot_label
+	
+	red_buffer_label_node = root_ui_node.red_buffer_label
+	blue_buffer_label_node = root_ui_node.blue_buffer_label
 
 func init_values():
 	#reset points
@@ -96,6 +110,14 @@ func _input(event):
 		print("\nMATCH SART/PAUSE")
 		print_match_scores()
 		toggle_timer()
+	if Input.is_action_just_pressed("botname_left"):
+		red_name_optlabel.text = GlobalUtils.get_bot_name(red_bot_id)
+		red_bot_id = (red_bot_id +1 )% GlobalUtils.bot_amount
+	if Input.is_action_just_pressed("botname_right"):
+	
+		blue_name_optlabel.text = GlobalUtils.get_bot_name(blue_bot_id)
+		blue_bot_id = (blue_bot_id +1 )% GlobalUtils.bot_amount
+		
 	if Input.is_action_just_pressed("t_reset"):
 		print("\nMATCH RESET")
 		print_match_scores()
@@ -197,10 +219,8 @@ func handle_points(delta):
 		var temp = blue_point_buffer
 		blue_point += temp
 		blue_point_buffer = blue_point_buffer - temp
-	blue_label_node.text = str(blue_point)
-	red_label_node.text = str(red_point)
-	blue_bottom_label.text = str(blue_point)
-	red_bottom_label.text = str(red_point)
+	
+	root_ui_node.update_points(red_point,blue_point)
 	#feedback buffers
 	
 	blue_buffer_label_node.text = ("+" if blue_point_buffer>0 else "")+str(blue_point_buffer)
@@ -326,12 +346,11 @@ func seconds_to_timestamp(seconds_f:float) -> String:
 		return res
 
 func print_match_scores():
-	var red_name = red_name_optlabel.get_item_text(red_name_optlabel.get_selected_id())
-	var blue_name = blue_name_optlabel.get_item_text(blue_name_optlabel.get_selected_id())
+	var red_name = red_name_optlabel.text
+	var blue_name = blue_name_optlabel.text
 	print("WIN FOR ",red_name, " -> ", red_name," ",red_point+round(time_left), " - ", blue_point," ",blue_name )
 	print("WIN FOR ",blue_name, " -> ",red_name," ",red_point, " - ", blue_point+round(time_left)," ",blue_name )
-	
-	
+
 
 func _on_CutAudioTimer_timeout():
 	$LongBeep.stop()
