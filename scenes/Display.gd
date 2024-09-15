@@ -282,10 +282,14 @@ func handle_release_timer(delta):
 			$ReleaseBeep.stop()
 			release_beeps = false
 		else:
+			
 			if release_left <= release_buffer:
 				release_buffer -= 1
 				$ReleaseBeep.play()
-			release_label_node.text = str("%2.1f" % release_left)
+			if release_left < 3 and release_left >2:
+				release_label_node.set_text("Wall!")
+			else:
+				release_label_node.text = str("%2.1f" % release_left)
 	else:
 		if release_beeps:
 			release_label_node.set_text("Release!")
@@ -336,8 +340,10 @@ func countdown():
 		beeps_player_node.play()
 		await get_tree().create_timer(0.2).timeout
 	beepl_player_node.pitch_scale = 0.6
-	var rand_wait = 1+randi()%20*0.1
+	var rand_wait = 0.5+(randi()%20)*0.1
+	
 	await get_tree().create_timer(rand_wait).timeout
+	print(rand_wait)
 	beepl_player_node.play()
 	$CutAudioTimer.start()
 	emit_signal("countdown_completed")
