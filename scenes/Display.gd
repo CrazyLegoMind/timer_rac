@@ -44,6 +44,7 @@ var release_flowing: = false
 var release_left: = release_seconds
 var release_text:String = "Release!"
 var release_beeps = false
+var release_buffer :int = int(release_seconds)
 
 var release_label_node = null
 var red_buffer_label_node = null
@@ -265,6 +266,7 @@ func handle_main_timer(delta):
 			else:
 				timer_label_node.text = seconds_to_timestamp(time_left)
 
+
 func handle_release_timer(delta):
 	if release_flowing:
 		release_left -= delta
@@ -280,24 +282,31 @@ func handle_release_timer(delta):
 			$ReleaseBeep.stop()
 			release_beeps = false
 		else:
-			release_label_node.text = seconds_to_timestamp(release_left)
+			if release_left <= release_buffer:
+				release_buffer -= 1
+				$ReleaseBeep.play()
+			release_label_node.text = str("%2.1f" % release_left)
 	else:
 		if release_beeps:
 			release_label_node.set_text("Release!")
 		elif time_flowing:
 			release_label_node.set_text("")
 
+
 func toggle_release(restart:bool):
 	if not time_flowing or standby:
 		return
 	if not release_flowing:
 		release_left = release_seconds
+		release_buffer = int(release_seconds)
 		release_flowing = true
 	else:
 		if restart:
 			release_left = release_seconds
 		else:
 			release_flowing = false
+			$ShortBeep.pitch_scale  = 0.4
+			$ShortBeep.play()
 
 func toggle_timer():
 	if time_flowing:
@@ -308,29 +317,32 @@ func toggle_timer():
 	else:
 		if countdown_running or time_left <= 0:
 			return
-		countdown(countdown_seconds)
+		countdown()
 		await self.countdown_completed
 		time_flowing = true
 		if release_state:
 			release_flowing = true
 
-func countdown(duration_sec:int):
+func countdown():
 	timer_label_node.self_modulate = Color(Color.WHITE)
 	if countdown_running:
 		return
 	countdown_running = true
-	beeps_player_node.pitch_scale = 0.8
-	for i in duration_sec:
-		timer_label_node.text = str(duration_sec-i)+ ".."
+	beeps_player_node.pitch_scale = 1.02
+	var temp = "."
+	for i in range(3):
+		timer_label_node.text = temp
+		temp += "."
 		beeps_player_node.play()
-		await get_tree().create_timer(1).timeout
-	beepl_player_node.pitch_scale = 0.8
-	emit_signal("countdown_completed")
-	standby = false
-	timer_label_node.text = "Start!"
+		await get_tree().create_timer(0.2).timeout
+	beepl_player_node.pitch_scale = 0.6
+	var rand_wait = 1+randi()%20*0.1
+	await get_tree().create_timer(rand_wait).timeout
 	beepl_player_node.play()
-	await get_tree().create_timer(0.5).timeout
-	beepl_player_node.stop()
+	$CutAudioTimer.start()
+	emit_signal("countdown_completed")
+	print("START!")
+	standby = false
 	countdown_running = false
 
 func seconds_to_timestamp(seconds_f:float) -> String:

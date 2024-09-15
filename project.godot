@@ -14,7 +14,7 @@ config/name="timer robot arena"
 run/main_scene="res://scenes/Display.tscn"
 config/features=PackedStringArray("4.2")
 boot_splash/bg_color=Color(0.141176, 0.141176, 0.141176, 1)
-config/icon="res://icon.png"
+config/icon="res://lrct.png"
 
 [autoload]
 
