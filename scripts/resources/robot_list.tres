@@ -1,0 +1,8 @@
+[gd_resource type="Resource" script_class="RobotList" load_steps=2 format=3 uid="uid://wqh8pvngngi6"]
+
+[ext_resource type="Script" path="res://scripts/classes/robot_list.gd" id="1_paee5"]
+
+[resource]
+script = ExtResource("1_paee5")
+partecipants = Array[Resource("res://scripts/classes/robot_stats.gd")]([])
+list_name = "default"

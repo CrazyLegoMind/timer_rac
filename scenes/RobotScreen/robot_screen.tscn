@@ -1,8 +1,7 @@
-[gd_scene load_steps=4 format=3 uid="uid://1yu47xm6la5d"]
+[gd_scene load_steps=3 format=3 uid="uid://1yu47xm6la5d"]
 
 [ext_resource type="Theme" uid="uid://b1evs2a7h13oy" path="res://assets/main_theme.tres" id="1_i1qfj"]
 [ext_resource type="Script" path="res://scenes/RobotScreen/robot_screen.gd" id="2_ek05m"]
-[ext_resource type="PackedScene" uid="uid://uqj81yft7u51" path="res://scenes/RobotScreen/robot_stats_panel.tscn" id="2_fdjcf"]
 
 [node name="RobotScreen" type="MarginContainer"]
 anchors_preset = 15
@@ -12,9 +11,11 @@ grow_horizontal = 2
 grow_vertical = 2
 theme = ExtResource("1_i1qfj")
 script = ExtResource("2_ek05m")
-robot_stat_panel = ExtResource("2_fdjcf")
 
-[node name="Robots" type="GridContainer" parent="."]
+[node name="CenterContainer" type="CenterContainer" parent="."]
+layout_mode = 2
+
+[node name="Robots" type="GridContainer" parent="CenterContainer"]
 unique_name_in_owner = true
 layout_mode = 2
-columns = 9
+columns = 6

@@ -32,3 +32,4 @@ layout_mode = 2
 text = "ANT"
 
 [connection signal="toggled" from="VBoxContainer/HBoxContainer/Playing" to="." method="_on_playing_toggled"]
+[connection signal="toggled" from="VBoxContainer/HBoxContainer/Ant" to="." method="_on_ant_toggled"]

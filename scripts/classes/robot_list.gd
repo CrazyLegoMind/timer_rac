@@ -1,15 +1,17 @@
 class_name RobotList extends Resource
 
-@export var Partecipants:Array[RobotStats] = []
+
+@export var partecipants:Array[RobotStats] = []
+@export var list_name = "default"
 
 func add_robot(robot:RobotStats):
-	Partecipants.append(robot)
+	partecipants.append(robot)
 
 func remove_robot(robot:RobotStats):
-	Partecipants.erase(robot)
+	partecipants.erase(robot)
 
 func _to_string():
-	var out = ""
-	for part in Partecipants:
+	var out = "default: \n"
+	for part in partecipants:
 		out += str(part)+"\n"
 	return out
