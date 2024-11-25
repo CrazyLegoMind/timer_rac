@@ -114,8 +114,8 @@ func _input(event):
 	if Input.is_action_just_pressed("botname_left"):
 		red_name_optlabel.text = GlobalUtils.get_bot_name(red_bot_id)
 		red_bot_id = (red_bot_id +1 )% GlobalUtils.bot_amount
-	if Input.is_action_just_pressed("botname_right"):
 	
+	if Input.is_action_just_pressed("botname_right"):
 		blue_name_optlabel.text = GlobalUtils.get_bot_name(blue_bot_id)
 		blue_bot_id = (blue_bot_id +1 )% GlobalUtils.bot_amount
 		

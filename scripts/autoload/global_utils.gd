@@ -24,6 +24,7 @@ var bot_amount = 0
 
 var saved_robot_list:RobotList = preload("res://scripts/resources/robot_list.tres")
 var robot_stat_tres:RobotStats = preload("res://scripts/resources/robot_stat.tres")
+
 func _ready():
 	saved_robot_list = RobotList.new()
 	for botname in bot_names_default:

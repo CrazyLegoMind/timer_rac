@@ -1,4 +1,13 @@
 res://default_env.tres
 res://scenes/RobotScreen/robot_stats_panel.tscn
 res://assets/main_theme.tres
+res://assets/font/50_trimmed.tres
+res://assets/font/200_trimmed.tres
+res://assets/font/100_trimmed.tres
+res://assets/font/600_trimmed.tres
 res://scenes/RobotScreen/robot_screen.tscn
+res://scenes/Display.tscn
+res://scenes/Display.gd
+res://scripts/autoload/global_utils.gd
+res://scenes/RobotScreen/robot_screen.gd
+res://scenes/standard_ui/standard_ui.tscn

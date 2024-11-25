@@ -27,8 +27,8 @@ timer_label = NodePath("VBoxContainer/TopHalf/TimerContainer/TimerLabel")
 debug_label = NodePath("VBoxContainer/TopHalf/TimerContainer/DebugLabel")
 red_points_labels = [NodePath("VBoxContainer/TopHalf/RedContainer/RedTpPoints"), NodePath("VBoxContainer/BottomPart/RedSide/RedBtmPoints")]
 blue_points_labels = [NodePath("VBoxContainer/TopHalf/BlueContainer/BlueTpPoints"), NodePath("VBoxContainer/BottomPart/BlueSide/BlueBtmPoints")]
-red_buffer_label = NodePath("VBoxContainer/BottomPart/RedSide/RedBufferLabel")
-blue_buffer_label = NodePath("VBoxContainer/BottomPart/BlueSide/BlueBufferLabel")
+red_buffer_label = NodePath("VBoxContainer/TopHalf/RedContainer/RedBufferLabel")
+blue_buffer_label = NodePath("VBoxContainer/TopHalf/BlueContainer/BlueBufferLabel")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
 layout_mode = 2
@@ -74,6 +74,15 @@ theme_override_fonts/font = ExtResource("3_jalsa")
 theme_override_font_sizes/font_size = 240
 text = "0"
 
+[node name="RedBufferLabel" type="Label" parent="VBoxContainer/TopHalf/RedContainer"]
+layout_mode = 2
+size_flags_vertical = 10
+theme_override_colors/font_color = Color(1, 0, 0, 1)
+theme_override_fonts/font = ExtResource("4_sj43n")
+theme_override_font_sizes/font_size = 100
+text = "0"
+horizontal_alignment = 1
+
 [node name="TimerContainer" type="VBoxContainer" parent="VBoxContainer/TopHalf"]
 layout_mode = 2
 size_flags_horizontal = 6
@@ -109,22 +118,24 @@ theme_override_font_sizes/font_size = 240
 text = "0"
 horizontal_alignment = 2
 
+[node name="BlueBufferLabel" type="Label" parent="VBoxContainer/TopHalf/BlueContainer"]
+layout_mode = 2
+size_flags_horizontal = 9
+size_flags_vertical = 10
+theme_override_colors/font_color = Color(0, 0, 1, 1)
+theme_override_fonts/font = ExtResource("4_sj43n")
+theme_override_font_sizes/font_size = 100
+text = "0"
+horizontal_alignment = 1
+
 [node name="BottomPart" type="HBoxContainer" parent="VBoxContainer"]
+visible = false
 layout_mode = 2
 size_flags_vertical = 10
 
 [node name="RedSide" type="VBoxContainer" parent="VBoxContainer/BottomPart"]
 layout_mode = 2
 size_flags_horizontal = 2
-
-[node name="RedBufferLabel" type="Label" parent="VBoxContainer/BottomPart/RedSide"]
-layout_mode = 2
-size_flags_vertical = 10
-theme_override_colors/font_color = Color(1, 0, 0, 1)
-theme_override_fonts/font = ExtResource("4_sj43n")
-theme_override_font_sizes/font_size = 100
-text = "0"
-horizontal_alignment = 1
 
 [node name="RedBtmPoints" type="Label" parent="VBoxContainer/BottomPart/RedSide"]
 layout_mode = 2
@@ -137,16 +148,6 @@ text = "0"
 layout_mode = 2
 size_flags_horizontal = 0
 size_flags_vertical = 8
-
-[node name="BlueBufferLabel" type="Label" parent="VBoxContainer/BottomPart/BlueSide"]
-layout_mode = 2
-size_flags_horizontal = 9
-size_flags_vertical = 10
-theme_override_colors/font_color = Color(0, 0, 1, 1)
-theme_override_fonts/font = ExtResource("4_sj43n")
-theme_override_font_sizes/font_size = 100
-text = "0"
-horizontal_alignment = 1
 
 [node name="BlueBtmPoints" type="Label" parent="VBoxContainer/BottomPart/BlueSide"]
 layout_mode = 2
