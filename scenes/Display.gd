@@ -7,8 +7,13 @@ const final_beeps_amount:int = 3
 const countdown_seconds:int = 3
 const release_seconds:float = 5.0
 
-var fscreen_mode := false
+enum BotSide{BOT_LEFT,BOT_RIGHT}
+enum PointTypes{FLIP,TOUCH,WALL,GRAB,OVERRIDE}
 
+#global vars
+var fscreen_mode := false
+var left_bot_stats :RobotStats = null
+var right_bot_stats :RobotStats = null
 #timer variables
 var time_flowing := false
 var countdown_running := false
@@ -22,21 +27,21 @@ var last_10_sec = false
 
 
 #points variables
-var red_delay:float = 0.0
-var blue_delay:float = 0.0
-var red_point_buffer:int = 0
-var blue_point_buffer:int = 0
-var red_point:int = 0
-var blue_point:int = 0
-var red_hold_time := 0.0
-var blue_hold_time := 0.0
-var red_sum_time := false
-var blue_sum_time := false
+var left_delay:float = 0.0
+var right_delay:float = 0.0
+var left_point_buffer:int = 0
+var right_point_buffer:int = 0
+var left_point:int = 0
+var right_point:int = 0
+var left_hold_time := 0.0
+var right_hold_time := 0.0
+var left_sum_time := false
+var right_sum_time := false
 
-var blue_touch_state := false
-var blue_touch_cooldown := 0.0
-var red_touch_state := false
-var red_touch_cooldown := 0.0
+var right_touch_state := false
+var right_touch_cooldown := 0.0
+var left_touch_state := false
+var left_touch_cooldown := 0.0
 
 
 #release_variables
@@ -47,18 +52,18 @@ var release_beeps = false
 var release_buffer :int = int(release_seconds)
 
 var release_label_node = null
-var red_buffer_label_node = null
-var blue_buffer_label_node = null
+var left_buffer_label_node = null
+var right_buffer_label_node = null
 var timer_label_node = null
 @onready var beeps_player_node = $ShortBeep
 @onready var beepl_player_node = $LongBeep
-var red_name_optlabel = null
-var blue_name_optlabel = null
+var left_name_optlabel = null
+var right_name_optlabel = null
 
 var root_ui_node: MatchUI = null
 
-var blue_bot_id = 0;
-var red_bot_id = 0;
+var right_bot_id = 0;
+var left_bot_id = 0;
 
 func _ready():
 	fill_nodes($StandardUI)
@@ -67,24 +72,82 @@ func _ready():
 	#Engine.time_scale = 0.2
 	pass # Replace with function body.
 
+func _input(event):
+
+	if Input.is_action_just_pressed("t_start"):
+		print("\nMATCH SART/PAUSE")
+		print_match_scores()
+		toggle_timer()
+	
+	if Input.is_action_just_pressed("t_reset"):
+		print("\nMATCH RESET")
+		print_match_scores()
+		init_values()
+	
+	if Input.is_action_just_pressed("botname_left"):
+		left_bot_stats = GlobalUtils.playing_robot_list.partecipants[left_bot_id]
+		left_name_optlabel.text = left_bot_stats.bot_name
+		left_bot_id = (left_bot_id +1 )% GlobalUtils.playing_robot_list.partecipants.size()
+	
+	
+	if Input.is_action_just_pressed("botname_right"):
+		right_bot_stats = GlobalUtils.playing_robot_list.partecipants[right_bot_id]
+		right_name_optlabel.text = right_bot_stats.bot_name
+		right_bot_id = (right_bot_id +1 )% GlobalUtils.playing_robot_list.partecipants.size()
+	
+	
+	if Input.is_action_just_pressed("t_release"):
+		toggle_release(Input.is_action_pressed("mode_key"))
+	
+	if Input.is_action_just_pressed("fullscreen"):
+		fscreen_mode = !fscreen_mode
+		get_window().mode = Window.MODE_EXCLUSIVE_FULLSCREEN if (fscreen_mode) else Window.MODE_WINDOWED
+	var point_mode = 1
+	if Input.is_action_pressed("mode_key"):
+		point_mode = -1
+	if Input.is_action_just_released("right_point"):
+		add_points(BotSide.BOT_RIGHT,PointTypes.OVERRIDE)
+	if Input.is_action_just_released("left_point"):
+		add_points(BotSide.BOT_LEFT,PointTypes.OVERRIDE)
+	if Input.is_action_just_released("right_touch") and $RightTouchTimer.is_stopped() and time_flowing:
+		$RightTouchTimer.start()
+		add_points(BotSide.BOT_RIGHT,PointTypes.TOUCH)
+		update_buffer(BotSide.BOT_RIGHT,"Hit!")
+	if Input.is_action_just_released("left_touch") and $LeftTouchTimer.is_stopped() and time_flowing:
+		$LeftTouchTimer.start()
+		add_points(BotSide.BOT_LEFT,PointTypes.TOUCH)
+		update_buffer(BotSide.BOT_LEFT,"Hit!")
+	if Input.is_action_just_released("right_flip"):
+		add_points(BotSide.BOT_RIGHT,PointTypes.FLIP)
+		update_buffer(BotSide.BOT_RIGHT,"FLIP")
+	if Input.is_action_just_released("left_flip"):
+		add_points(BotSide.BOT_LEFT,PointTypes.FLIP)
+		update_buffer(BotSide.BOT_LEFT,"FLIP")
+	if Input.is_action_just_released("right_wall"):
+		add_points(BotSide.BOT_RIGHT,PointTypes.WALL)
+		update_buffer(BotSide.BOT_RIGHT,"push>")
+	if Input.is_action_just_released("left_wall"):
+		add_points(BotSide.BOT_LEFT,PointTypes.WALL)
+		update_buffer(BotSide.BOT_LEFT,"push>")
+
 func fill_nodes(root_ui:MatchUI):
 	root_ui_node = root_ui
 	
 	timer_label_node = root_ui_node.timer_label
 	release_label_node = root_ui_node.debug_label
 	
-	red_name_optlabel = root_ui_node.red_bot_label
-	blue_name_optlabel = root_ui_node.blue_bot_label
+	left_name_optlabel = root_ui_node.left_bot_label
+	right_name_optlabel = root_ui_node.right_bot_label
 	
-	red_buffer_label_node = root_ui_node.red_buffer_label
-	blue_buffer_label_node = root_ui_node.blue_buffer_label
+	left_buffer_label_node = root_ui_node.left_buffer_label
+	right_buffer_label_node = root_ui_node.right_buffer_label
 
 func init_values():
 	#reset points
-	red_point_buffer = 0
-	blue_point_buffer = 0
-	red_point = 0
-	blue_point = 0
+	left_point_buffer = 0
+	right_point_buffer = 0
+	left_point = 0
+	right_point = 0
 	
 	#reset timer
 	time_flowing = false
@@ -102,130 +165,61 @@ func init_values():
 	release_beeps = false
 	release_label_node.self_modulate = Color(Color.YELLOW)
 	release_label_node.set_text("")
-
-
-
-func _input(event):
-
-	if Input.is_action_just_pressed("t_start"):
-		print("\nMATCH SART/PAUSE")
-		print_match_scores()
-		toggle_timer()
-	if Input.is_action_just_pressed("botname_left"):
-		red_name_optlabel.text = GlobalUtils.get_bot_name(red_bot_id)
-		red_bot_id = (red_bot_id +1 )% GlobalUtils.bot_amount
 	
-	if Input.is_action_just_pressed("botname_right"):
-		blue_name_optlabel.text = GlobalUtils.get_bot_name(blue_bot_id)
-		blue_bot_id = (blue_bot_id +1 )% GlobalUtils.bot_amount
-		
-	if Input.is_action_just_pressed("t_reset"):
-		print("\nMATCH RESET")
-		print_match_scores()
-		init_values()
-	if Input.is_action_just_pressed("t_release"):
-		toggle_release(Input.is_action_pressed("mode_key"))
-	if Input.is_action_just_pressed("fullscreen"):
-		fscreen_mode = !fscreen_mode
-		get_window().mode = Window.MODE_EXCLUSIVE_FULLSCREEN if (fscreen_mode) else Window.MODE_WINDOWED
+	#bots
+	left_bot_stats = GlobalUtils.playing_robot_list.partecipants[left_bot_id]
+	right_bot_stats = GlobalUtils.playing_robot_list.partecipants[right_bot_id]
 
-#	if Input.is_action_just_released("blue_point"):
-#		blue_point_buffer += point_mode
-#		blue_delay += point_display_delay
-#	if Input.is_action_just_released("red_point"):
-#		red_point_buffer += point_mode
-#		red_delay += point_display_delay
+func add_points(side:BotSide,point_type:PointTypes):
+	var point_mode = 1
+	if Input.is_action_pressed("mode_key"):
+		point_mode = -1
+	var points = 0
+	if not time_flowing and not point_type == PointTypes.OVERRIDE:
+		return
+	match point_type:
+		PointTypes.FLIP:
+			points = 3
+		PointTypes.TOUCH:
+			points = 1
+		PointTypes.WALL:
+			points = 1
+		PointTypes.GRAB:
+			points = 5
+		PointTypes.OVERRIDE:
+			points = 1
+	if side == BotSide.BOT_LEFT:
+		if left_bot_stats.is_antweight and [PointTypes.FLIP,PointTypes.WALL].has(point_type):
+			points += 1
+		left_point += points
+		return
+	if side == BotSide.BOT_RIGHT:
+		if right_bot_stats.is_antweight and [PointTypes.FLIP,PointTypes.WALL].has(point_type):
+			points += 1
+		right_point += points
+		return
+
+
+func update_buffer(side:BotSide,text:String):
+	if side == BotSide.BOT_LEFT:
+		left_buffer_label_node.text = text
+		$LeftDebugClear.start()
+		return
+	if side == BotSide.BOT_RIGHT:
+		right_buffer_label_node.text = text
+		$RightDebugClear.start()
+		return
+
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _physics_process(delta):
-	handle_point_input(delta)
 	handle_main_timer(delta)
 	handle_points(delta)
 	handle_release_timer(delta)
 
 
-func handle_point_input(delta):
-	var point_mode = 1
-	var release_restart = false
-	if Input.is_action_pressed("mode_key"):
-		point_mode = -1
-		release_restart = true
-	if Input.is_action_pressed("mode_up_key"):
-		point_mode = point_mode*3
-	if not time_flowing:
-		point_mode = 0
-	if blue_touch_cooldown >= 0.0:
-		blue_touch_cooldown -= delta
-	if red_touch_cooldown >= 0.0:
-		red_touch_cooldown -= delta
-	
-	if Input.is_action_pressed("blue_touch") and not blue_touch_state:
-		blue_touch_state = true
-		if blue_touch_cooldown <= 0.0:
-			blue_point_buffer += 1
-			blue_touch_cooldown = 1.0
-	elif not Input.is_action_pressed("blue_touch"):
-		blue_touch_state = false
-	
-	if Input.is_action_pressed("red_touch") and not red_touch_state:
-		red_touch_state = true
-		if red_touch_cooldown <= 0.0:
-			red_point_buffer += 1
-			red_touch_cooldown = 1.0
-	elif not Input.is_action_pressed("red_touch"):
-		red_touch_state = false
-	
-	if Input.is_action_pressed("blue_point"):
-		blue_hold_time += delta
-		if blue_hold_time > 0.03 and blue_sum_time:
-			blue_sum_time = false
-			blue_point_buffer += point_mode
-			blue_delay += point_display_delay
-		if blue_hold_time > 1.0:
-			blue_point_buffer += point_mode
-			blue_delay += point_display_delay
-			blue_hold_time = 0.0
-	else:
-		blue_hold_time = 0.0
-		blue_sum_time = true
-	
-	
-	if Input.is_action_pressed("red_point"):
-		red_hold_time += delta
-		if red_hold_time > 0.03 and red_sum_time:
-			red_sum_time = false
-			red_point_buffer += point_mode
-			red_delay += point_display_delay
-		if red_hold_time > 1.0:
-			red_point_buffer += point_mode
-			red_delay += point_display_delay
-			red_hold_time = 0.0
-	else:
-		red_hold_time = 0.0
-		red_sum_time = true
-	
-	
-
 func handle_points(delta):
-	# big points
-	red_delay -= delta
-	blue_delay -= delta
-	red_delay = clamp(red_delay,0.0,point_display_delay)
-	blue_delay = clamp(blue_delay,0.0,point_display_delay)
-	if red_delay <= 0 and red_point_buffer != 0:
-		var temp = red_point_buffer
-		red_point += temp
-		red_point_buffer = red_point_buffer - temp
-	if blue_delay <= 0 and blue_point_buffer != 0:
-		var temp = blue_point_buffer
-		blue_point += temp
-		blue_point_buffer = blue_point_buffer - temp
-	
-	root_ui_node.update_points(red_point,blue_point)
-	#feedback buffers
-	
-	blue_buffer_label_node.text = ("+" if blue_point_buffer>0 else "")+str(blue_point_buffer)
-	red_buffer_label_node.text = ("+" if red_point_buffer>0 else "")+str(red_point_buffer)
+	root_ui_node.update_points(left_point,right_point)
 
 func handle_main_timer(delta):
 	if time_flowing :
@@ -364,11 +358,19 @@ func seconds_to_timestamp(seconds_f:float) -> String:
 		return res
 
 func print_match_scores():
-	var red_name = red_name_optlabel.text
-	var blue_name = blue_name_optlabel.text
-	print("WIN FOR ",red_name, " -> ", red_name," ",red_point+round(time_left), " - ", blue_point," ",blue_name )
-	print("WIN FOR ",blue_name, " -> ",red_name," ",red_point, " - ", blue_point+round(time_left)," ",blue_name )
+	var left_name = left_name_optlabel.text
+	var right_name = right_name_optlabel.text
+	print("WIN FOR ",left_name, " -> ", left_name," ",left_point+round(time_left), " - ", right_point," ",right_name )
+	print("WIN FOR ",right_name, " -> ",left_name," ",left_point, " - ", right_point+round(time_left)," ",right_name )
 
 
 func _on_CutAudioTimer_timeout():
 	$LongBeep.stop()
+
+
+func _on_right_debug_clear_timeout():
+	right_buffer_label_node.text = ""
+
+
+func _on_left_debug_clear_timeout():
+	left_buffer_label_node.text = ""

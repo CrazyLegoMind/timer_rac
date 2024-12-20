@@ -7,7 +7,11 @@ res://assets/font/100_trimmed.tres
 res://assets/font/600_trimmed.tres
 res://scenes/RobotScreen/robot_screen.tscn
 res://scenes/Display.tscn
+res://scenes/standard_ui/standard_ui.tscn
 res://scenes/Display.gd
+res://scripts/classes/MatchUI.gd
+res://scripts/resources/robot_list.tres
 res://scripts/autoload/global_utils.gd
 res://scenes/RobotScreen/robot_screen.gd
-res://scenes/standard_ui/standard_ui.tscn
+res://scenes/RobotScreen/robot_stats_panel.gd
+res://scripts/classes/robot_list.gd

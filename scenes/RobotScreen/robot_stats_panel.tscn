@@ -31,5 +31,6 @@ unique_name_in_owner = true
 layout_mode = 2
 text = "ANT"
 
+[connection signal="text_changed" from="VBoxContainer/BotName" to="." method="_on_bot_name_text_changed"]
 [connection signal="toggled" from="VBoxContainer/HBoxContainer/Playing" to="." method="_on_playing_toggled"]
 [connection signal="toggled" from="VBoxContainer/HBoxContainer/Ant" to="." method="_on_ant_toggled"]

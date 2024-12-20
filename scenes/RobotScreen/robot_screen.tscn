@@ -23,10 +23,17 @@ unique_name_in_owner = true
 layout_mode = 2
 columns = 6
 
-[node name="Start" type="Button" parent="CenterContainer/VBoxContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="CenterContainer/VBoxContainer"]
 layout_mode = 2
-size_flags_horizontal = 4
-size_flags_vertical = 8
+
+[node name="Add" type="Button" parent="CenterContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 2
+text = "ADD ROBOT"
+
+[node name="Start" type="Button" parent="CenterContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
 text = "START TOURNAMENT"
 
-[connection signal="pressed" from="CenterContainer/VBoxContainer/Start" to="." method="_on_start_pressed"]
+[connection signal="pressed" from="CenterContainer/VBoxContainer/HBoxContainer/Add" to="." method="_on_add_pressed"]
+[connection signal="pressed" from="CenterContainer/VBoxContainer/HBoxContainer/Start" to="." method="_on_start_pressed"]

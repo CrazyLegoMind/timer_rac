@@ -25,6 +25,8 @@ var bot_amount = 0
 var saved_robot_list:RobotList = preload("res://scripts/resources/robot_list.tres")
 var robot_stat_tres:RobotStats = preload("res://scripts/resources/robot_stat.tres")
 
+var playing_robot_list:RobotList = preload("res://scripts/resources/robot_list.tres")
+
 func _ready():
 	saved_robot_list = RobotList.new()
 	for botname in bot_names_default:
@@ -32,15 +34,19 @@ func _ready():
 		placeholder_robot.bot_name = botname
 		saved_robot_list.add_robot(placeholder_robot)
 	load_data()
-	load_bot_names()
+	save_data()
 
 func save_data():
+	for robot in saved_robot_list.partecipants:
+		print(robot)
+		if robot.bot_name.to_lower() == "robot":
+			saved_robot_list.remove_robot(robot)
 	var result = ResourceSaver.save(saved_robot_list,botlist_file)
 	print("saved: ", result)
 
 func load_data():
 	if ResourceLoader.exists(botlist_file):
-		var file_list = ResourceLoader.load(botlist_file,)
+		var file_list = ResourceLoader.load(botlist_file)
 		if file_list is RobotList: # Check that the data is valid
 			print("file_list ok: ",file_list)
 			saved_robot_list = file_list
@@ -49,22 +55,13 @@ func load_data():
 			print("file_list ERR")
 	save_data()
 
-func load_bot_names() -> Array:
-	var array_result = []
-	print("part \n", saved_robot_list.partecipants)
+func fill_playing_robots():
+	playing_robot_list.list_name = "playing"
 	for robot in saved_robot_list.partecipants:
 		print(robot)
 		if robot.is_playing:
-			array_result.append(robot.bot_name)
-	bot_amount = array_result.size()
-	bot_names = array_result
-	print(bot_amount)
-	return array_result
+			playing_robot_list.add_robot(robot)
 
-func get_bot_name(id:int)-> String:
-	if id < bot_amount:
-		return bot_names[id]
-	return "bot 404"
 
 func _exit_tree():
 	save_data()

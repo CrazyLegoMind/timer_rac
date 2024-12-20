@@ -13,6 +13,22 @@ fight_time_seconds = 90.0
 wait_time = 0.5
 one_shot = true
 
+[node name="RightTouchTimer" type="Timer" parent="."]
+process_callback = 0
+one_shot = true
+
+[node name="LeftTouchTimer" type="Timer" parent="."]
+process_callback = 0
+one_shot = true
+
+[node name="RightDebugClear" type="Timer" parent="."]
+wait_time = 0.5
+one_shot = true
+
+[node name="LeftDebugClear" type="Timer" parent="."]
+wait_time = 0.5
+one_shot = true
+
 [node name="ShortBeep" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("3")
 
@@ -27,3 +43,5 @@ stream = ExtResource("4")
 [node name="StandardUI" parent="." instance=ExtResource("4_e23qh")]
 
 [connection signal="timeout" from="CutAudioTimer" to="." method="_on_CutAudioTimer_timeout"]
+[connection signal="timeout" from="RightDebugClear" to="." method="_on_right_debug_clear_timeout"]
+[connection signal="timeout" from="LeftDebugClear" to="." method="_on_left_debug_clear_timeout"]

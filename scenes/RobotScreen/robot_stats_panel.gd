@@ -30,3 +30,7 @@ func _on_ant_toggled(toggled_on):
 	if toggled_on != bot_stats.is_antweight:
 		bot_stats.is_antweight = toggled_on
 		update_visuals()
+
+
+func _on_bot_name_text_changed(new_text):
+	bot_stats.bot_name = new_text

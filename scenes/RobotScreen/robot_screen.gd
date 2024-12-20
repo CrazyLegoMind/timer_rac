@@ -15,4 +15,12 @@ func _ready():
 
 func _on_start_pressed():
 	get_tree().change_scene_to_packed(tournament_scene)
-	GlobalUtils.load_bot_names()
+	GlobalUtils.save_data()
+	GlobalUtils.fill_playing_robots()
+
+
+func _on_add_pressed():
+	var stats_node = robot_stat_panel.instantiate()
+	stats_node.bot_stats = RobotStats.new()
+	GlobalUtils.saved_robot_list.add_robot(stats_node.bot_stats)
+	robots_grid.add_child(stats_node)

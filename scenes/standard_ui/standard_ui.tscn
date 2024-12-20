@@ -7,7 +7,7 @@
 [ext_resource type="FontVariation" uid="uid://bdlpo0x6gqswq" path="res://assets/font/100_trimmed.tres" id="4_sj43n"]
 [ext_resource type="FontVariation" uid="uid://cl6rn10f2dnr1" path="res://assets/font/600_trimmed.tres" id="5_pa8jx"]
 
-[node name="StandardUI" type="MarginContainer" node_paths=PackedStringArray("red_bot_label", "blue_bot_label", "timer_label", "debug_label", "red_points_labels", "blue_points_labels", "red_buffer_label", "blue_buffer_label")]
+[node name="StandardUI" type="MarginContainer" node_paths=PackedStringArray("left_bot_label", "right_bot_label", "timer_label", "debug_label", "left_points_labels", "right_points_labels", "left_buffer_label", "right_buffer_label")]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -19,16 +19,16 @@ theme = ExtResource("1_q44xk")
 theme_override_constants/margin_left = 20
 theme_override_constants/margin_top = 20
 theme_override_constants/margin_right = 20
-theme_override_constants/margin_bottom = 20
+theme_override_constants/margin_bottom = 50
 script = ExtResource("2_r407t")
-red_bot_label = NodePath("VBoxContainer/HBoxContainer/RedBotLabel")
-blue_bot_label = NodePath("VBoxContainer/HBoxContainer/BlueBotLabel")
-timer_label = NodePath("VBoxContainer/TopHalf/TimerContainer/TimerLabel")
-debug_label = NodePath("VBoxContainer/TopHalf/TimerContainer/DebugLabel")
-red_points_labels = [NodePath("VBoxContainer/TopHalf/RedContainer/RedTpPoints"), NodePath("VBoxContainer/BottomPart/RedSide/RedBtmPoints")]
-blue_points_labels = [NodePath("VBoxContainer/TopHalf/BlueContainer/BlueTpPoints"), NodePath("VBoxContainer/BottomPart/BlueSide/BlueBtmPoints")]
-red_buffer_label = NodePath("VBoxContainer/TopHalf/RedContainer/RedBufferLabel")
-blue_buffer_label = NodePath("VBoxContainer/TopHalf/BlueContainer/BlueBufferLabel")
+left_bot_label = NodePath("VBoxContainer/HBoxContainer/LeftBotLabel")
+right_bot_label = NodePath("VBoxContainer/HBoxContainer/RightBotLabel")
+timer_label = NodePath("VBoxContainer/BottomPart/TimerContainer/TimerLabel")
+debug_label = NodePath("VBoxContainer/BottomPart/TimerContainer/DebugLabel")
+left_points_labels = [NodePath("VBoxContainer/TopHalf/LeftContainer/LeftTpPoints"), NodePath("VBoxContainer/BottomPart/LeftSide/LeftBtmPoints")]
+right_points_labels = [NodePath("VBoxContainer/TopHalf/BlueContainer/RightTpPoints"), NodePath("VBoxContainer/BottomPart/RightSide/RightBtmPoints")]
+left_buffer_label = NodePath("VBoxContainer/TopHalf/LeftContainer/LeftBufferLabel")
+right_buffer_label = NodePath("VBoxContainer/TopHalf/BlueContainer/RightBufferLabel")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
 layout_mode = 2
@@ -37,35 +37,35 @@ size_flags_vertical = 3
 [node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
 layout_mode = 2
 
-[node name="RedBotLabel" type="Label" parent="VBoxContainer/HBoxContainer"]
+[node name="LeftBotLabel" type="Label" parent="VBoxContainer/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 4
 theme_override_colors/font_color = Color(1, 0, 0, 1)
 theme_override_constants/outline_size = 20
 theme_override_fonts/font = ExtResource("2_blh57")
 theme_override_font_sizes/font_size = 80
-text = "Red Bot"
+text = "Left Bot"
 
-[node name="BlueBotLabel" type="Label" parent="VBoxContainer/HBoxContainer"]
+[node name="RightBotLabel" type="Label" parent="VBoxContainer/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 10
 theme_override_colors/font_color = Color(0, 0, 1, 1)
 theme_override_constants/outline_size = 20
 theme_override_fonts/font = ExtResource("2_blh57")
 theme_override_font_sizes/font_size = 80
-text = "Blue Bot"
+text = "Right Bot"
 
 [node name="TopHalf" type="HBoxContainer" parent="VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 0
 alignment = 1
 
-[node name="RedContainer" type="VBoxContainer" parent="VBoxContainer/TopHalf"]
+[node name="LeftContainer" type="VBoxContainer" parent="VBoxContainer/TopHalf"]
 layout_mode = 2
-size_flags_horizontal = 0
+size_flags_horizontal = 2
 size_flags_vertical = 0
 
-[node name="RedTpPoints" type="Label" parent="VBoxContainer/TopHalf/RedContainer"]
+[node name="LeftTpPoints" type="Label" parent="VBoxContainer/TopHalf/LeftContainer"]
 custom_minimum_size = Vector2(290, 0)
 layout_mode = 2
 size_flags_horizontal = 0
@@ -73,8 +73,10 @@ theme_override_colors/font_color = Color(1, 0, 0, 1)
 theme_override_fonts/font = ExtResource("3_jalsa")
 theme_override_font_sizes/font_size = 240
 text = "0"
+horizontal_alignment = 1
+vertical_alignment = 1
 
-[node name="RedBufferLabel" type="Label" parent="VBoxContainer/TopHalf/RedContainer"]
+[node name="LeftBufferLabel" type="Label" parent="VBoxContainer/TopHalf/LeftContainer"]
 layout_mode = 2
 size_flags_vertical = 10
 theme_override_colors/font_color = Color(1, 0, 0, 1)
@@ -83,32 +85,11 @@ theme_override_font_sizes/font_size = 100
 text = "0"
 horizontal_alignment = 1
 
-[node name="TimerContainer" type="VBoxContainer" parent="VBoxContainer/TopHalf"]
-layout_mode = 2
-size_flags_horizontal = 6
-theme_override_constants/separation = 35
-alignment = 1
-
-[node name="TimerLabel" type="Label" parent="VBoxContainer/TopHalf/TimerContainer"]
-layout_mode = 2
-size_flags_horizontal = 4
-size_flags_vertical = 3
-theme_override_fonts/font = ExtResource("3_jalsa")
-theme_override_font_sizes/font_size = 200
-text = "2:00"
-
-[node name="DebugLabel" type="Label" parent="VBoxContainer/TopHalf/TimerContainer"]
-layout_mode = 2
-size_flags_horizontal = 4
-size_flags_vertical = 1
-theme_override_fonts/font = ExtResource("2_blh57")
-theme_override_font_sizes/font_size = 50
-text = "Release"
-
 [node name="BlueContainer" type="VBoxContainer" parent="VBoxContainer/TopHalf"]
 layout_mode = 2
+size_flags_horizontal = 10
 
-[node name="BlueTpPoints" type="Label" parent="VBoxContainer/TopHalf/BlueContainer"]
+[node name="RightTpPoints" type="Label" parent="VBoxContainer/TopHalf/BlueContainer"]
 custom_minimum_size = Vector2(290, 0)
 layout_mode = 2
 size_flags_horizontal = 9
@@ -116,9 +97,10 @@ theme_override_colors/font_color = Color(0, 0, 1, 1)
 theme_override_fonts/font = ExtResource("3_jalsa")
 theme_override_font_sizes/font_size = 240
 text = "0"
-horizontal_alignment = 2
+horizontal_alignment = 1
+vertical_alignment = 1
 
-[node name="BlueBufferLabel" type="Label" parent="VBoxContainer/TopHalf/BlueContainer"]
+[node name="RightBufferLabel" type="Label" parent="VBoxContainer/TopHalf/BlueContainer"]
 layout_mode = 2
 size_flags_horizontal = 9
 size_flags_vertical = 10
@@ -129,27 +111,50 @@ text = "0"
 horizontal_alignment = 1
 
 [node name="BottomPart" type="HBoxContainer" parent="VBoxContainer"]
-visible = false
 layout_mode = 2
 size_flags_vertical = 10
 
-[node name="RedSide" type="VBoxContainer" parent="VBoxContainer/BottomPart"]
+[node name="LeftSide" type="VBoxContainer" parent="VBoxContainer/BottomPart"]
+visible = false
 layout_mode = 2
 size_flags_horizontal = 2
 
-[node name="RedBtmPoints" type="Label" parent="VBoxContainer/BottomPart/RedSide"]
+[node name="LeftBtmPoints" type="Label" parent="VBoxContainer/BottomPart/LeftSide"]
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 0, 0, 1)
 theme_override_fonts/font = ExtResource("5_pa8jx")
 theme_override_font_sizes/font_size = 600
 text = "0"
 
-[node name="BlueSide" type="VBoxContainer" parent="VBoxContainer/BottomPart"]
+[node name="TimerContainer" type="VBoxContainer" parent="VBoxContainer/BottomPart"]
+layout_mode = 2
+size_flags_horizontal = 6
+theme_override_constants/separation = 35
+alignment = 1
+
+[node name="TimerLabel" type="Label" parent="VBoxContainer/BottomPart/TimerContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 3
+theme_override_fonts/font = ExtResource("3_jalsa")
+theme_override_font_sizes/font_size = 200
+text = "2:00"
+
+[node name="DebugLabel" type="Label" parent="VBoxContainer/BottomPart/TimerContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 1
+theme_override_fonts/font = ExtResource("2_blh57")
+theme_override_font_sizes/font_size = 50
+text = "Release"
+
+[node name="RightSide" type="VBoxContainer" parent="VBoxContainer/BottomPart"]
+visible = false
 layout_mode = 2
 size_flags_horizontal = 0
 size_flags_vertical = 8
 
-[node name="BlueBtmPoints" type="Label" parent="VBoxContainer/BottomPart/BlueSide"]
+[node name="RightBtmPoints" type="Label" parent="VBoxContainer/BottomPart/RightSide"]
 layout_mode = 2
 size_flags_horizontal = 9
 theme_override_colors/font_color = Color(0, 0, 1, 1)

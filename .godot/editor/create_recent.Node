@@ -1,8 +1,8 @@
+HBoxContainer
+Timer
 Button
 VBoxContainer
 CenterContainer
-Timer
 MatchUI
 Label
 OptionButton
-HBoxContainer
