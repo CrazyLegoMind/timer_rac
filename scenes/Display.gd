@@ -85,15 +85,17 @@ func _input(event):
 		init_values()
 	
 	if Input.is_action_just_pressed("botname_left"):
+		left_bot_id = (left_bot_id +1 )% GlobalUtils.playing_robot_list.partecipants.size()
 		left_bot_stats = GlobalUtils.playing_robot_list.partecipants[left_bot_id]
 		left_name_optlabel.text = left_bot_stats.bot_name
-		left_bot_id = (left_bot_id +1 )% GlobalUtils.playing_robot_list.partecipants.size()
+		
 	
 	
 	if Input.is_action_just_pressed("botname_right"):
+		right_bot_id = (right_bot_id +1 )% GlobalUtils.playing_robot_list.partecipants.size()
 		right_bot_stats = GlobalUtils.playing_robot_list.partecipants[right_bot_id]
 		right_name_optlabel.text = right_bot_stats.bot_name
-		right_bot_id = (right_bot_id +1 )% GlobalUtils.playing_robot_list.partecipants.size()
+		
 	
 	
 	if Input.is_action_just_pressed("t_release"):
@@ -191,11 +193,13 @@ func add_points(side:BotSide,point_type:PointTypes):
 	if side == BotSide.BOT_LEFT:
 		if left_bot_stats.is_antweight and [PointTypes.FLIP,PointTypes.WALL].has(point_type):
 			points += 1
+		points= points*point_mode
 		left_point += points
 		return
 	if side == BotSide.BOT_RIGHT:
 		if right_bot_stats.is_antweight and [PointTypes.FLIP,PointTypes.WALL].has(point_type):
 			points += 1
+		points= points*point_mode
 		right_point += points
 		return
 
